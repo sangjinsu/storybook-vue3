@@ -1,0 +1,84 @@
+<!-- Button.stories.mdx -->
+
+import { Meta, Story, Canvas } from '@storybook/addon-docs';
+import { userEvent, within } from '@storybook/testing-library';
+import { expect } from '@storybook/jest';
+
+import Button from './Button.vue';
+
+## Hello Button
+
+<Meta title="Button"
+      component={Button}
+      argTypes={{
+        text: {
+          table: {
+            category: 'Text'
+          }
+        },
+        onClick: {
+          table: {
+            category: 'Events'
+          }
+        }
+      }}
+/>
+
+export const Template = (args) => ({
+  components: { Button },
+  setup() {
+    return { args };
+  },
+  template: `<div>
+              <button :onClick="args.onClick" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">{{args.text}}</button>
+             </div>`,
+});
+
+<Canvas>
+  <Story name="Primary" args={{text: "Primary"}}>
+    {Template.bind({})}
+  </Story>
+</Canvas>
+
+
+<Canvas>
+  <Story
+    name="Secondary">
+    {() => {
+      return {
+        components: { Button },
+        template: `
+        <Button text="Secondary" label="😄👍😍💯" />`,
+      };
+    }}
+  </Story>
+</Canvas>
+
+
+<Canvas>
+  <Story
+    name="Tertiary">
+    {() => {
+      return {
+        components: { Button },
+        template: `
+        <Button text="Tertiary" label="📚📕📈🤓" />`,
+      };
+    }}
+  </Story>
+</Canvas>
+
+
+<Canvas>
+  <Story
+    name="Click Button"
+    args={{text: "Interaction Test"}}
+    play={async ({ canvasElement }) => {
+      const canvas = within(canvasElement);
+      await userEvent.click(canvas.getByRole("button"))
+      await userEvent.click(canvas.getByRole("button"))
+      await userEvent.click(canvas.getByRole("button"))
+    }}>
+    {Template.bind({})}
+  </Story>
+</Canvas>
